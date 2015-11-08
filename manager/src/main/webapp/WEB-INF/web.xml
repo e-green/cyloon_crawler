@@ -1,0 +1,61 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+
+    <display-name>CrawlerManager_service</display-name>
+
+    <servlet>
+        <servlet-name>CrawlerManager</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>io.egreen.cyloon.crawler.app.filter.DIFeature</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>io.egreen.cyloon.crawler.app</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CrawlerManager</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+
+
+    <!--<listener>-->
+        <!--<listener-class>io.egreen.cyloon.crawler.app.filter.CustomeJerseyGuiceServletContextListener</listener-class>-->
+    <!--</listener>-->
+
+    <!--<filter>-->
+        <!--<filter-name>guiceFilter</filter-name>-->
+        <!--<filter-class>com.google.inject.servlet.GuiceFilter</filter-class>-->
+    <!--</filter>-->
+
+    <!--<filter-mapping>-->
+        <!--<filter-name>guiceFilter</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <!--<filter>-->
+    <!--<filter-name>CORS</filter-name>-->
+    <!--<filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>-->
+    <!-- -->
+    <!--</filter>-->
+
+
+    <!--<filter-mapping>-->
+    <!--<filter-name>CORS</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+</web-app>

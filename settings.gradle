@@ -1,0 +1,6 @@
+rootProject.name = 'crawler'
+include 'app'
+include 'manager'
+include 'crawlerapp'
+findProject(':crawlerapp')?.name = 'crawler'
+

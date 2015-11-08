@@ -1,0 +1,18 @@
+{
+  "_comment": "FOR DETAILED FORMAT LOOK AT https://docs.docker.com/reference/api/docker_remote_api_v1.16/#create-a-container",
+  "AttachStdin": true,
+  "OpenStdin": true,
+  "HostConfig": {
+    "RestartPolicy": {
+      "Name": "ON_FAILURE"
+    },
+    "PortBindings": {
+      "8080/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "7878"
+        }
+      ]
+    }
+  }
+}
