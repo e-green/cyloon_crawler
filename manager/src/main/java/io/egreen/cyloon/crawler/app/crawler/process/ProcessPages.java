@@ -1,4 +1,4 @@
-package io.egreen.cyloon.crawler.app.crawler.dep.process;
+package io.egreen.cyloon.crawler.app.crawler.process;
 
 import io.egreen.cyloon.crawler.app.model.SiteDate;
 import org.jsoup.HttpStatusException;
@@ -10,12 +10,9 @@ import org.jsoup.nodes.Document;
 public interface ProcessPages {
 
 
-    String[] accepts();
+    boolean accepts(String pattern);
 
     SiteDate getCrawlerModel(Document document) throws HttpStatusException;
-
-
-
 
 
 }

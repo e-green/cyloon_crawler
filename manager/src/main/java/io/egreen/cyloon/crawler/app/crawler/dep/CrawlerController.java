@@ -27,8 +27,8 @@ public class CrawlerController {
 //        Logger.getRootLogger().setLevel(Level.INFO);
 
 
-        String crawlStorageFolder = "/data/cyloon";
-//            String crawlStorageFolder = "~/data/cyloon";
+//        String crawlStorageFolder = "/data/cyloon";
+            String crawlStorageFolder = "~/data/cyloon";
             int numberOfCrawlers = 2;
 
             CrawlConfig config = new CrawlConfig();

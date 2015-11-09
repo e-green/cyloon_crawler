@@ -1,9 +1,11 @@
 package io.egreen.cyloon.crawler.app.rest;
 
 import io.egreen.cyloon.crawler.app.crawler.CrawlerServiceApi;
+import io.egreen.cyloon.crawler.app.model.SeedPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
@@ -41,6 +43,20 @@ public class AdminService {
 
         try {
             crawlerServiceApi.addSeeds(seed);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+//        crawlerJob.doRun();
+        return "DONE";
+    }
+
+
+    @Path("/crawler/seedpolicy/save")
+    @POST
+    public String saveSeed(SeedPolicy seedPolicy) {
+
+        try {
+            crawlerServiceApi.addSeedPolicy(seedPolicy);
         } catch (Exception e) {
             return e.getMessage();
         }

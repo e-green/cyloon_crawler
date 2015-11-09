@@ -43,6 +43,43 @@ public class SiteDate {
     private String link;
 
 
+    private boolean grabbed;
+    private int grabCount;
+    private boolean indexed;
+    private Date lastIndexedTime;
+
+    public Date getLastIndexedTime() {
+        return lastIndexedTime;
+    }
+
+    public void setLastIndexedTime(Date lastIndexedTime) {
+        this.lastIndexedTime = lastIndexedTime;
+    }
+
+    public boolean isIndexed() {
+        return indexed;
+    }
+
+    public void setIndexed(boolean indexed) {
+        this.indexed = indexed;
+    }
+
+    public boolean isGrabbed() {
+        return grabbed;
+    }
+
+    public void setGrabbed(boolean grabbed) {
+        this.grabbed = grabbed;
+    }
+
+    public int getGrabCount() {
+        return grabCount;
+    }
+
+    public void setGrabCount(int grabCount) {
+        this.grabCount = grabCount;
+    }
+
     public String getTitle() {
         return title;
     }

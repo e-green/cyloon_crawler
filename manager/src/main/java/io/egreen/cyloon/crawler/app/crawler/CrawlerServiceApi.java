@@ -1,7 +1,10 @@
 package io.egreen.cyloon.crawler.app.crawler;
 
+import io.egreen.cyloon.crawler.app.crawler.dep.CrawlerController;
 import io.egreen.cyloon.crawler.app.crawler.workers.Crawler;
 import io.egreen.cyloon.crawler.app.model.SeedUrl;
+import io.egreen.cyloon.crawler.app.model.SeedPolicy;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Scope(value = "singleton")
 public class CrawlerServiceApi {
+    private static final Logger LOGGER = Logger.getLogger(CrawlerServiceApi.class);
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -20,6 +24,20 @@ public class CrawlerServiceApi {
 
     @Autowired
     private Crawler crawler;
+
+
+    /**
+     * Save Seed Policies
+     *
+     * @param seedPolicies
+     * @return
+     */
+    public boolean addSeedPolicy(SeedPolicy... seedPolicies) {
+        for (SeedPolicy seedPolicy : seedPolicies) {
+            mongoTemplate.save(seedPolicy);
+        }
+        return false;
+    }
 
 
     /**
@@ -61,8 +79,13 @@ public class CrawlerServiceApi {
         return crawler.isRunning();
     }
 
-    public void start() throws Exception {
 
+//    @Autowired
+//    private CrawlerController crawlerController;
+
+    public void start() throws Exception {
+        LOGGER.info("Working");
+//        crawlerController.Start();
         crawler.load();
 
     }

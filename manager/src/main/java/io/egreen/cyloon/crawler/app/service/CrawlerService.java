@@ -24,8 +24,6 @@ public class CrawlerService {
     private MongoTemplate mongoTemplate;
 
 
-
-
     public String saveSeedUrl(SiteLinks siteLink) {
         Query query = Query.query(Criteria.where("link").is(siteLink.getLink()));
 
@@ -88,6 +86,7 @@ public class CrawlerService {
 
 
     public String updateUrlInfo(SiteDate siteDate) {
+//        mongoTemplate.save();
         try {
             System.out.println(siteDate.getLink());
             Query query = Query.query(Criteria.where("link").is(siteDate.getLink()));
@@ -106,6 +105,19 @@ public class CrawlerService {
                 mongoTemplate.updateFirst(query, Update.update("title", siteDate.getTitle()), SiteDate.class);
                 mongoTemplate.updateFirst(query, Update.update("tpNumbers", siteDate.getTpNumbers()), SiteDate.class);
                 mongoTemplate.updateFirst(query, Update.update("postDateTime", siteDate.getPostDateTime()), SiteDate.class);
+
+
+                /**
+                 *
+                 *     private boolean grabbed;
+                 private int grabCount;
+                 private boolean indexed;
+                 *
+                 */
+                mongoTemplate.updateFirst(query, Update.update("grabCount", siteDate.getGrabCount()), SiteDate.class);
+                mongoTemplate.updateFirst(query, Update.update("grabbed", siteDate.isGrabbed()), SiteDate.class);
+                mongoTemplate.updateFirst(query, Update.update("lastIndexedTime", siteDate.getLastIndexedTime()), SiteDate.class);
+                mongoTemplate.updateFirst(query, Update.update("indexed", siteDate.isIndexed()), SiteDate.class);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -38,6 +38,7 @@ dependencies {
     compile 'org.apache.solr:solr-solrj:5.3.1'
 
 
+
 }
 war.archiveName = "web.war"
 

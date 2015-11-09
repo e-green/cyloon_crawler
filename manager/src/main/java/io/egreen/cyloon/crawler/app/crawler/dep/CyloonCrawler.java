@@ -5,12 +5,10 @@ import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
-import io.egreen.cyloon.crawler.app.crawler.dep.process.IkmanLkProcessor;
+import io.egreen.cyloon.crawler.app.crawler.process.impl.IkmanLkProcessor;
 import io.egreen.cyloon.crawler.app.model.SiteDate;
 import io.egreen.cyloon.crawler.app.model.SiteLinks;
 import io.egreen.cyloon.crawler.app.service.CrawlerService;
-import org.glassfish.jersey.client.JerseyClient;
-import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 

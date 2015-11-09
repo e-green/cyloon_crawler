@@ -5,7 +5,12 @@ import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
+import io.egreen.cyloon.crawler.app.model.SeedPolicy;
+import io.egreen.cyloon.crawler.app.model.SeedUrl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -20,14 +25,53 @@ public class CrawlerWorker extends WebCrawler {
 
     private CrawlerDBHelper crawlerDBHelper;
 
+    private String name;
 
-    public CrawlerWorker() {
-        if (crawlerDBHelper == null) {
-            CrawlController myController1 = getMyController();
-            crawlerDBHelper = (CrawlerDBHelper) myController1.getCustomData();
+    private List<SeedUrl> seedUrls;
+    private final Map<String, SeedPolicy> seedPolicies = new HashMap<>();
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        System.out.println("CrawlerWorker" + crawlerDBHelper);
+        try {
+            if (crawlerDBHelper == null) {
+                CrawlController myController1 = getMyController();
+                Map customData = (Map) myController1.getCustomData();
+                crawlerDBHelper = (CrawlerDBHelper) customData.get(CrawlerDBHelper.class);
+                seedUrls = crawlerDBHelper.getSeedUrls();
+                name = (String) customData.get("NAME");
+
+                List<SeedPolicy> seedPoliciesList = crawlerDBHelper.getSeedPolicies();
+                for (SeedPolicy seedPolicy : seedPoliciesList) {
+                    seedPolicies.put(seedPolicy.getName(), seedPolicy);
+                }
+
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        System.out.println("CrawlerWorker" + crawlerDBHelper);
     }
 
+    @Override
+    public boolean isNotWaitingForNewURLs() {
+        System.out.println("Wating for urls ....");
+        return super.isNotWaitingForNewURLs();
+    }
+
+    @Override
+    public void onBeforeExit() {
+        super.onBeforeExit();
+        System.out.println("Exitting....");
+    }
+
+    @Override
+    protected WebURL handleUrlBeforeProcess(WebURL curURL) {
+        return super.handleUrlBeforeProcess(curURL);
+    }
 
     /**
      * This method receives two parameters. The first parameter is the page
@@ -45,12 +89,27 @@ public class CrawlerWorker extends WebCrawler {
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String href = url.getURL().toLowerCase();
-        return checkMatch(href);
+        boolean match = checkMatch(href);
+        System.out.println(name + " = " + href + " - " + match);
+
+        return match;
     }
 
     private boolean checkMatch(String href) {
-        return !FILTERS.matcher(href).matches()
-                && crawlerDBHelper.shouldVisit(href);
+
+        if (!FILTERS.matcher(href).matches()) {
+            for (SeedUrl seedUrl : seedUrls) {
+                System.out.println(seedUrl.getShouldVisitPattern());
+                boolean shouldVisit = Pattern.matches(seedUrl.getShouldVisitPattern(), href);
+                boolean shouldReject = Pattern.matches(seedPolicies.get(seedUrl.getName()).getRejectPolicy(), href);
+                if (shouldVisit && !shouldReject) {
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
     }
 
 
@@ -63,18 +122,23 @@ public class CrawlerWorker extends WebCrawler {
 
 
         String url = page.getWebURL().getURL();
-        System.out.println("URL: " + url);
+//        System.out.println("URL: " + url);
 
         if (page.getParseData() instanceof HtmlParseData) {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-            String text = htmlParseData.getText();
-            String html = htmlParseData.getHtml();
-
-            crawlerDBHelper.savePage(url, htmlParseData.getTitle());
-
-
+            if (canSave(url)) {
+                crawlerDBHelper.savePage(url, htmlParseData.getTitle());
+            }
         }
     }
 
+
+    private boolean canSave(String url) {
+        for (String policyKey : seedPolicies.keySet()) {
+            SeedPolicy seedPolicy = seedPolicies.get(policyKey);
+            return Pattern.matches(seedPolicy.getAcceptPolicy(), url);
+        }
+        return false;
+    }
 
 }

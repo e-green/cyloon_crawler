@@ -36,8 +36,8 @@ public class Crawler {
 
 
     public void load() throws Exception {
-        int numberOfCrawlers = 4;
-
+        int numberOfCrawlers = 2;
+        System.out.println(crawlConfig);
         /*
          * Instantiate the controller for this crawl.
          */
@@ -58,13 +58,13 @@ public class Crawler {
             seedUrlMap.put(seedUrl.getName(), urls);
 
         }
-
+        System.out.println(seedUrlMap);
 
         for (String key : seedUrlMap.keySet()) {
 
             CrawlController controller = CRAWL_CONTROLLER_MAP.get(key);
 
-            if (controller == null) {
+            if (controller == null || controller != null && !controller.isFinished()) {
                 controller = new CrawlController(crawlConfig, pageFetcher, robotstxtServer);
             }
 
@@ -79,15 +79,27 @@ public class Crawler {
                 controller.addSeed(url.getUrl());
             }
 
-            controller.setCustomData(crawlerDBHelper);
+            Map<Object, Object> customData = new HashMap<>();
+            customData.put(CrawlerDBHelper.class, crawlerDBHelper);
+            customData.put("NAME", key);
+
+            controller.setCustomData(customData);
 
         /*
          * Start the crawl. This is a blocking operation, meaning that your code
          * will reach the line after this only when crawling is finished.
          */
-            controller.startNonBlocking(CrawlerWorker.class, numberOfCrawlers);
+
 
             CRAWL_CONTROLLER_MAP.put(key, controller);
+        }
+
+        for (String crawlerControllerKey : CRAWL_CONTROLLER_MAP.keySet()) {
+            CrawlController crawlController = CRAWL_CONTROLLER_MAP.get(crawlerControllerKey);
+
+            crawlController.startNonBlocking(CrawlerWorker.class, numberOfCrawlers);
+
+            System.out.println(crawlController.isFinished());
         }
 
 

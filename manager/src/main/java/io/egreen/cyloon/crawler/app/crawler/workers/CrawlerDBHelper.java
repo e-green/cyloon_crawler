@@ -1,8 +1,13 @@
 package io.egreen.cyloon.crawler.app.crawler.workers;
 
+import io.egreen.cyloon.crawler.app.model.SeedPolicy;
 import io.egreen.cyloon.crawler.app.model.SeedUrl;
+import io.egreen.cyloon.crawler.app.model.SiteDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -34,7 +39,7 @@ public class CrawlerDBHelper {
      * @return
      */
     public boolean shouldVisit(String href) {
-        return false;
+        return true;
     }
 
 
@@ -43,14 +48,16 @@ public class CrawlerDBHelper {
      * @param title
      */
     public void savePage(String url, String title) {
-
-
-        // Before Save please check save policy
-
-//Higly Working method should use in thread
-
-
+        SiteDate siteDate = new SiteDate();
+        siteDate.setGrabbed(false);
+        siteDate.setGrabCount(-1);
+        siteDate.setLink(url);
+        siteDate.setTitle(title);
+        mongoTemplate.save(siteDate);
     }
 
 
+    public List<SeedPolicy> getSeedPolicies() {
+        return mongoTemplate.findAll(SeedPolicy.class);
+    }
 }

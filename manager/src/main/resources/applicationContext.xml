@@ -44,15 +44,33 @@
 
   http://www.springframework.org/schema/data/mongo
   http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
+
 >
     <context:annotation-config/>
     <context:component-scan base-package="io.egreen.cyloon.crawler.app"/>
+
+    <task:executor id="executor" pool-size="8-25" queue-capacity="100"/>
+    <task:scheduler id="scheduler" pool-size="10"/>
+
+
+    <task:annotation-driven/>
+    <task:annotation-driven executor="executor" scheduler="scheduler"/>
+
     <mongo:mongo host="208.43.16.210" port="27017"/>
+
+    <mongo:repositories base-package="io.egreen.cyloon.crawler.app.db.repositary"></mongo:repositories>
 
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg ref="mongo"/>
         <constructor-arg name="databaseName" value="crawler_date_classified"/>
     </bean>
+
+    <!--<bean name="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">-->
+    <!--<property name="corePoolSize" value="10"/>-->
+    <!--<property name="maxPoolSize" value="20"/>-->
+    <!--<property name="queueCapacity" value="100"/>-->
+    <!--</bean>-->
+
 
     <!--<bean id="crawlerController" scope="singleton" class="io.egreen.cyloon.crawler.app.crawler.dep.CrawlerController"/>-->
     <!--<bean id="crawlerService" scope="singleton" class="io.egreen.cyloon.crawler.app.service.CrawlerService"/>-->
@@ -67,20 +85,20 @@
 
     <!--&lt;!&ndash; Configure the fixedDealy, fixedRate or cron based schduled tasks &ndash;&gt;-->
     <!--<task:scheduled-tasks scheduler="myScheduler">-->
-        <!--<task:scheduled ref="crawlerTask" method="doRun" cron="0 0 * * * *"/>-->
+    <!--<task:scheduled ref="crawlerTask" method="doRun" cron="0 0 * * * *"/>-->
     <!--</task:scheduled-tasks>-->
 
 
     <!--Config Crawler-->
 
     <bean id="crawlerStorage" class="java.lang.String">
-        <constructor-arg  value="~/data/cyloon"></constructor-arg>
+        <constructor-arg value="/home/dewmal/data"></constructor-arg>
     </bean>
 
     <bean name="crawlerConfig" class="edu.uci.ics.crawler4j.crawler.CrawlConfig">
 
         <property name="resumableCrawling" value="true"></property>
-        <property name="crawlStorageFolder" value="crawlerStorage"></property>
+        <property name="crawlStorageFolder" ref="crawlerStorage"></property>
         <property name="maxDepthOfCrawling" value="10"></property>
         <property name="politenessDelay" value="200"></property>
         <property name="userAgentString" value="cyloon (http://cyloon.com)"></property>

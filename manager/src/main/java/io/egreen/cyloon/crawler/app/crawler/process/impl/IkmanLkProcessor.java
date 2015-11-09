@@ -1,5 +1,6 @@
-package io.egreen.cyloon.crawler.app.crawler.dep.process;
+package io.egreen.cyloon.crawler.app.crawler.process.impl;
 
+import io.egreen.cyloon.crawler.app.crawler.process.ProcessPages;
 import io.egreen.cyloon.crawler.app.model.SiteDate;
 import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
@@ -13,15 +14,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by dewmal on 10/12/15.
  */
 public class IkmanLkProcessor implements ProcessPages {
 
+
     @Override
-    public String[] accepts() {
-        return new String[]{""};
+    public boolean accepts(String pattern) {
+        return Pattern.matches("^(http|https)://ikman.lk/(en|si)/ad/.*", pattern);
     }
 
     public SiteDate getCrawlerModel(Document doc) throws HttpStatusException {
