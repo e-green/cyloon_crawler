@@ -7,6 +7,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import io.egreen.cyloon.crawler.app.model.SeedUrl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Singleton;
@@ -35,9 +36,11 @@ public class Crawler {
     private final static Map<String, CrawlController> CRAWL_CONTROLLER_MAP = new ConcurrentHashMap<>();
 
 
+
+
     public void load() throws Exception {
-        int numberOfCrawlers = 2;
-        System.out.println(crawlConfig);
+        int numberOfCrawlers =2;
+//        System.out.println(crawlConfig);
         /*
          * Instantiate the controller for this crawl.
          */
@@ -58,7 +61,7 @@ public class Crawler {
             seedUrlMap.put(seedUrl.getName(), urls);
 
         }
-        System.out.println(seedUrlMap);
+//        System.out.println(seedUrlMap);
 
         for (String key : seedUrlMap.keySet()) {
 
@@ -99,7 +102,7 @@ public class Crawler {
 
             crawlController.startNonBlocking(CrawlerWorker.class, numberOfCrawlers);
 
-            System.out.println(crawlController.isFinished());
+//            System.out.println(crawlController.isFinished());
         }
 
 

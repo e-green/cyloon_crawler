@@ -3,6 +3,7 @@ package io.egreen.cyloon.crawler.app.crawler.workers;
 import io.egreen.cyloon.crawler.app.model.SeedPolicy;
 import io.egreen.cyloon.crawler.app.model.SeedUrl;
 import io.egreen.cyloon.crawler.app.model.SiteDate;
+import io.egreen.cyloon.crawler.app.service.CrawlerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
@@ -20,6 +21,10 @@ public class CrawlerDBHelper {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+
+    @Autowired
+    private CrawlerService crawlerService;
 
 
     /**
@@ -42,6 +47,10 @@ public class CrawlerDBHelper {
         return true;
     }
 
+
+    public void savePage(SiteDate siteDate) {
+        crawlerService.updateUrlInfo(siteDate);
+    }
 
     /***
      * @param url

@@ -29,7 +29,7 @@ public class IkmanLkProcessor implements ProcessPages {
 
     public SiteDate getCrawlerModel(Document doc) throws HttpStatusException {
         SiteDate siteData = new SiteDate();
-
+//        System.out.println(doc.html());
 
 //        URL urlLink = new URL(url);
 

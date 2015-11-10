@@ -25,7 +25,7 @@ public class RiayaSewanaProcessor implements ProcessPages {
     public SiteDate getCrawlerModel(Document doc) throws HttpStatusException {
         SiteDate siteData = new SiteDate();
 
-
+//        System.out.println(doc.html());
 //        URL urlLink = new URL(url);
 
 //            Document doc = Jsoup.connect(url).userAgent("Chrome").get();
@@ -33,15 +33,17 @@ public class RiayaSewanaProcessor implements ProcessPages {
 
         // Title
         Elements newsHeadlines = doc.select("title");
-        String title = newsHeadlines.get(0).html();
+//        System.out.println(newsHeadlines.html());
+        String title = newsHeadlines.html();
         siteData.setTitle(title);
 //        System.out.println("title " + title);
 
 
         Elements select = doc.select("table").select("tbody").select("tr");
         for (Element element : select) {
-            Elements innerElement = element.select("td").select("p");
-            System.out.println(innerElement.toString());
+            System.out.println(element.child(1).select("span"));
+            Element innerElement = element.select("td").select("p").get(0);
+//            System.out.println(innerElement.toString());
         }
 
 //

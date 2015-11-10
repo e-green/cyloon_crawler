@@ -45,16 +45,10 @@
   http://www.springframework.org/schema/data/mongo
   http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
 
+
 >
     <context:annotation-config/>
     <context:component-scan base-package="io.egreen.cyloon.crawler.app"/>
-
-    <task:executor id="executor" pool-size="8-25" queue-capacity="100"/>
-    <task:scheduler id="scheduler" pool-size="10"/>
-
-
-    <task:annotation-driven/>
-    <task:annotation-driven executor="executor" scheduler="scheduler"/>
 
     <mongo:mongo host="208.43.16.210" port="27017"/>
 
@@ -65,29 +59,13 @@
         <constructor-arg name="databaseName" value="crawler_date_classified"/>
     </bean>
 
-    <!--<bean name="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">-->
-    <!--<property name="corePoolSize" value="10"/>-->
-    <!--<property name="maxPoolSize" value="20"/>-->
-    <!--<property name="queueCapacity" value="100"/>-->
-    <!--</bean>-->
 
 
-    <!--<bean id="crawlerController" scope="singleton" class="io.egreen.cyloon.crawler.app.crawler.dep.CrawlerController"/>-->
-    <!--<bean id="crawlerService" scope="singleton" class="io.egreen.cyloon.crawler.app.service.CrawlerService"/>-->
 
-
-    <!--<bean id="crawlerTask" scope="singleton" class="io.egreen.cyloon.crawler.app.jobs.CrawlerJob"/>-->
-
-    <!--<task:annotation-driven/>-->
-    <!--<task:scheduler id="homework" pool-size="10"/>-->
-    <!-- Configure the scheduler -->
-    <!--<task:scheduler id="myScheduler" pool-size="10"/>-->
-
-    <!--&lt;!&ndash; Configure the fixedDealy, fixedRate or cron based schduled tasks &ndash;&gt;-->
-    <!--<task:scheduled-tasks scheduler="myScheduler">-->
-    <!--<task:scheduled ref="crawlerTask" method="doRun" cron="0 0 * * * *"/>-->
-    <!--</task:scheduled-tasks>-->
-
+    <bean id="httpSolrClient" class="org.apache.solr.client.solrj.impl.HttpSolrClient" scope="singleton">
+        <!--<constructor-arg type="java.lang.String" value="http://172.17.42.1:8983/solr/cyloon_search_engine"/>-->
+        <constructor-arg type="java.lang.String" value="http://apps.egreenhive.com:8983/solr/cyloon_search_engine"/>
+    </bean>
 
     <!--Config Crawler-->
 
@@ -103,6 +81,16 @@
         <property name="politenessDelay" value="200"></property>
         <property name="userAgentString" value="cyloon (http://cyloon.com)"></property>
     </bean>
+
+    <!--&lt;!&ndash;<bean id="myScheduler" class=""/>&ndash;&gt;-->
+    <!--<task:scheduled-tasks>-->
+        <!--<task:scheduled ref="indexJob" method="grabData"  cron="*/10 * * * * *"/>-->
+    <!--</task:scheduled-tasks>-->
+
+
+
+
+
 
 
 </beans>

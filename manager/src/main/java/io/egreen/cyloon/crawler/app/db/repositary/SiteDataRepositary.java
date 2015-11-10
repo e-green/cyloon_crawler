@@ -9,9 +9,7 @@ import java.util.stream.Stream;
 /**
  * Created by dewmal on 11/9/15.
  */
-public interface SiteDataRepositary extends MongoRepository<SiteDate, String> {
+public interface SiteDataRepositary  {
 
-    @Query("{ 'grabCount'=-1}")
-    Stream<SiteDate> getFirstSiteDataForCrawlling();
 
 }
