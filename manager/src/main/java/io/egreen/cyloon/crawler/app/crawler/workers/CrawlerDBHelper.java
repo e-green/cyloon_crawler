@@ -6,9 +6,6 @@ import io.egreen.cyloon.crawler.app.model.SiteDate;
 import io.egreen.cyloon.crawler.app.service.CrawlerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.BasicQuery;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,6 +22,10 @@ public class CrawlerDBHelper {
 
     @Autowired
     private CrawlerService crawlerService;
+
+
+
+
 
 
     /**

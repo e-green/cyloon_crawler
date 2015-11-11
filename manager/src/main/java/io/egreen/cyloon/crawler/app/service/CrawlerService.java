@@ -1,5 +1,6 @@
 package io.egreen.cyloon.crawler.app.service;
 
+import io.egreen.cyloon.crawler.app.db.repositary.SiteDataRepository;
 import io.egreen.cyloon.crawler.app.model.SiteDate;
 import io.egreen.cyloon.crawler.app.model.SiteLinks;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -8,9 +9,12 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.request.UpdateRequest;
+import org.apache.solr.client.solrj.request.schema.SchemaRequest;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.SolrInputField;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -31,6 +35,12 @@ import java.util.List;
  */
 @Service
 public class CrawlerService {
+
+
+    @Qualifier("siteDataRepository")
+    @Autowired
+    private SiteDataRepository siteDataRepository;
+
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -109,42 +119,13 @@ public class CrawlerService {
             if (siteDate1 != null) {
                 siteDate.setId(siteDate1.getId());
             }
-            new IndexUpdate(siteDate).run();
+
 
             siteDate.setIndexed(true);
             siteDate.setLastIndexedTime(new Date());
-            mongoTemplate.save(siteDate);
+            siteDataRepository.save(siteDate);
             System.out.println("Update Done...." + siteDate);
-
-//            else {
-//                mongoTemplate.updateFirst(query, Update.update("content", siteDate.getContent()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("curruncy", siteDate.getCurruncy()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("email", siteDate.getEmail()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("images", siteDate.getImages()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("keywords", siteDate.getKeywords()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("location", siteDate.getLocation()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("ownerName", siteDate.getOwnerName()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("price", siteDate.getPrice()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("title", siteDate.getTitle()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("tpNumbers", siteDate.getTpNumbers()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("postDateTime", siteDate.getPostDateTime()), SiteDate.class);
-//
-//
-//                /**
-//                 *
-//                 *     private boolean grabbed;
-//                 private int grabCount;
-//                 private boolean indexed;
-//                 *
-//                 */
-//                mongoTemplate.updateFirst(query, Update.update("grabCount", siteDate.getGrabCount()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("grabbed", siteDate.isGrabbed()), SiteDate.class);
-//                mongoTemplate.updateFirst(query, Update.update("lastIndexedTime", siteDate.getLastIndexedTime()), SiteDate.class);
-//
-////                UpdateResponse queryResponse = httpSolrClient.deleteByQuery("_id", siteDate1 != null ? siteDate1.getId() : null);
-
-
-//            }
+            new IndexUpdate(siteDate).run();
 
 
         } catch (Exception e) {
@@ -176,12 +157,14 @@ public class CrawlerService {
 
 
             SolrInputDocument solrInputDocument = new SolrInputDocument();
-            solrInputDocument.addField("title", siteDate.getTitle());
+            solrInputDocument.addField("title", siteDate.getTitle() + "");
             solrInputDocument.addField("content", siteDate.getContent());
             solrInputDocument.addField("keywords", siteDate.getKeywords());
             solrInputDocument.addField("location", siteDate.getLocation());
+            solrInputDocument.addField("price", siteDate.getPrice());
+            solrInputDocument.addField("updateTime", new Date());
+            solrInputDocument.addField("sortID", new Date().getTime());
             solrInputDocument.addField("id_", siteDate.getId());
-
 
             try {
 

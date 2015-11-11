@@ -45,7 +45,10 @@
   http://www.springframework.org/schema/data/mongo
   http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
 >
-    <context:annotation-config></context:annotation-config>
+    <context:annotation-config/>
+    <context:component-scan base-package="io.egreen.cyloon.search.app"/>
+
+
     <mongo:mongo host="208.43.16.210" port="27017"/>
 
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
@@ -63,13 +66,9 @@
 
 
     <bean id="httpSolrClient" class="org.apache.solr.client.solrj.impl.HttpSolrClient" scope="singleton">
-        <constructor-arg type="java.lang.String" value="http://172.17.42.1:8983/solr/cyloon_search_engine"/>
-        <!--<constructor-arg type="java.lang.String" value="http://172.17.42.1apps.egreenhive.com:8983/solr/cyloon_search_engine"/>-->
+        <!--<constructor-arg type="java.lang.String" value="http://172.17.42.1:8983/solr/cyloon_search_engine"/>-->
+        <constructor-arg type="java.lang.String" value="http://apps.egreenhive.com:8983/solr/cyloon_search_engine"/>
     </bean>
-
-    <bean id="searchService" class="io.egreen.cyloon.search.app.service.SearchService" scope="singleton"></bean>
-    <bean id="indexBuilder" class="io.egreen.cyloon.search.app.workers.IndexBuilder" scope="singleton"
-          init-method="IndexBuilder"></bean>
 
 
     <!--<bean id="crawlerController" scope="singleton" class="io.egreen.cyloon.crawler.app.crawler.dep.CrawlerController"/>-->

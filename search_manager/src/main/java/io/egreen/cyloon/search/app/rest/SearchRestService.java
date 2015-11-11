@@ -2,7 +2,7 @@ package io.egreen.cyloon.search.app.rest;
 
 import io.egreen.cyloon.search.app.model.SiteDate;
 import io.egreen.cyloon.search.app.service.SearchService;
-import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.solr.common.SolrDocumentList;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
@@ -32,26 +32,25 @@ public class SearchRestService {
     }
 
 
-    @Path("/index")
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    public String indexingData() {
-        System.out.println("ASDASD");
-        try {
-            searchService.index();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "HELLO";//dbApiService.getName("Hello");
-    }
-
     @Path("/search")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<SiteDate> getREsult(@QueryParam("query") String query) {
+    public SolrDocumentList getREsult(@QueryParam("query") String query,
+//                                    @QueryParam("filterQuery") String filterQuery,
+//                                    @QueryParam("fields") @DefaultValue("title,content,location,keywords") String fields,
+                                      @QueryParam("start") @DefaultValue(value = "0") int start,
+                                      @QueryParam("limit") @DefaultValue(value = "10") int limit
+    ) {
+
+        System.out.println(searchService);
+
         try {
-            return searchService.find(query);
+
+//            if (filterQuery == null) {
+//                fields = "";
+//            }
+
+            return searchService.find(query, start, limit);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {

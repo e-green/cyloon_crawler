@@ -5,8 +5,11 @@ import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
+import io.egreen.cyloon.crawler.app.db.repositary.SiteDataRepository;
 import io.egreen.cyloon.crawler.app.model.SeedUrl;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
@@ -31,15 +34,16 @@ public class Crawler {
 
     @Autowired
     private CrawlerDBHelper crawlerDBHelper;
-
+    @Autowired
+    private HttpSolrClient httpSolrClient;
 
     private final static Map<String, CrawlController> CRAWL_CONTROLLER_MAP = new ConcurrentHashMap<>();
 
 
-
-
     public void load() throws Exception {
-        int numberOfCrawlers =2;
+//        httpSolrClient.deleteByQuery("*:*");
+
+        int numberOfCrawlers = 4;
 //        System.out.println(crawlConfig);
         /*
          * Instantiate the controller for this crawl.
